@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weight Loss Activity Cards Deck</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+        }
+
+        .btn-tertiary {
+            background: linear-gradient(45deg, #feca57, #ff9ff3);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.6);
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--card-color);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .card-header {
+            margin-bottom: 15px;
+        }
+
+        .card-number {
+            display: inline-block;
+            background: var(--card-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .card-category {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .card-content {
+            margin-bottom: 20px;
+        }
+
+        .card-challenge {
+            background: linear-gradient(135deg, #f8f9ff, #e8f0ff);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--card-color);
+        }
+
+        .challenge-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .card-tips {
+            list-style: none;
+            margin-bottom: 15px;
+        }
+
+        .card-tips li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .card-tips li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--card-color);
+            font-weight: bold;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .difficulty {
+            display: flex;
+            gap: 3px;
+        }
+
+        .difficulty-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ddd;
+        }
+
+        .difficulty-dot.filled {
+            background: var(--card-color);
+        }
+
+        .card-action {
+            background: var(--card-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .card-action:hover {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+
+        /* Category Colors */
+        .nutrition { --card-color: #ff6b6b; }
+        .activity { --card-color: #4ecdc4; }
+        .behavior { --card-color: #45b7d1; }
+        .advanced { --card-color: #96ceb4; }
+        .metabolic { --card-color: #feca57; }
+        .psychological { --card-color: #ff9ff3; }
+        .monitoring { --card-color: #a8e6cf; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .close {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏆 Weight Loss Activity Cards</h1>
+            <p>44 Engaging Challenges to Transform Your Health Journey</p>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" onclick="shuffleCards()">🎲 Shuffle Deck</button>
+            <button class="btn btn-secondary" onclick="drawRandomCard()">🎯 Draw Random Card</button>
+            <button class="btn btn-tertiary" onclick="showAll()">👀 Show All Cards</button>
+        </div>
+
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-category="all">All Cards</button>
+            <button class="filter-btn" data-category="nutrition">🥗 Nutrition</button>
+            <button class="filter-btn" data-category="activity">🏃 Activity</button>
+            <button class="filter-btn" data-category="behavior">🧠 Behavior</button>
+            <button class="filter-btn" data-category="advanced">⚡ Advanced</button>
+            <button class="filter-btn" data-category="metabolic">🔥 Metabolic</button>
+            <button class="filter-btn" data-category="psychological">💭 Mental</button>
+            <button class="filter-btn" data-category="monitoring">📊 Tracking</button>
+        </div>
+
+        <div class="cards-grid" id="cardsGrid">
+            <!-- Cards will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="cardModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        const cards = [
+            {
+                number: 1,
+                title: "Calorie Detective",
+                category: "nutrition",
+                challenge: "Track every bite for 7 days using a food diary or app",
+                tips: ["Use measuring cups for portions", "Include drinks and snacks", "Take photos of meals", "Log immediately after eating"],
+                difficulty: 2,
+                action: "Start Tracking"
+            },
+            {
+                number: 2,
+                title: "Plate Artist",
+                category: "nutrition",
+                challenge: "Create the perfect plate: 1/2 vegetables, 1/4 protein, 1/4 whole grains",
+                tips: ["Use a 9-inch plate", "Fill veggies first", "Choose colorful produce", "Measure with your hand"],
+                difficulty: 1,
+                action: "Design Plate"
+            },
+            {
+                number: 3,
+                title: "Protein Power",
+                category: "nutrition",
+                challenge: "Include protein in every meal for one week",
+                tips: ["Aim for palm-sized portions", "Try plant-based options", "Prep protein in advance", "Mix different sources"],
+                difficulty: 2,
+                action: "Power Up"
+            },
+            {
+                number: 4,
+                title: "Fiber Champion",
+                category: "nutrition",
+                challenge: "Eat 25-35g of fiber daily for 10 days",
+                tips: ["Add beans to salads", "Choose whole grain bread", "Snack on fruits with skin", "Include vegetables at breakfast"],
+                difficulty: 2,
+                action: "Boost Fiber"
+            },
+            {
+                number: 5,
+                title: "Hydration Hero",
+                category: "nutrition",
+                challenge: "Drink a glass of water before each meal for 2 weeks",
+                tips: ["Set phone reminders", "Use a marked water bottle", "Add lemon for flavor", "Track with an app"],
+                difficulty: 1,
+                action: "Stay Hydrated"
+            },
+            {
+                number: 6,
+                title: "Mindful Muncher",
+                category: "nutrition",
+                challenge: "Eat one meal per day in complete silence, focusing on taste and texture",
+                tips: ["Put fork down between bites", "Chew 20-30 times", "Notice flavors and aromas", "Eat without distractions"],
+                difficulty: 2,
+                action: "Eat Mindfully"
+            },
+            {
+                number: 7,
+                title: "Meal Prep Master",
+                category: "nutrition",
+                challenge: "Prep all meals for 3 days in advance",
+                tips: ["Choose one prep day", "Use glass containers", "Prep ingredients separately", "Include healthy snacks"],
+                difficulty: 3,
+                action: "Start Prepping"
+            },
+            {
+                number: 8,
+                title: "Liquid Eliminator",
+                category: "nutrition",
+                challenge: "Replace all sugary drinks with water or unsweetened tea for 14 days",
+                tips: ["Try sparkling water", "Add fruit slices", "Use herbal teas", "Keep drinks visible"],
+                difficulty: 2,
+                action: "Go Sugar-Free"
+            },
+            {
+                number: 9,
+                title: "80/20 Balancer",
+                category: "nutrition", 
+                challenge: "Follow healthy eating 80% of the time, allow treats 20%",
+                tips: ["Plan your treat meals", "Don't feel guilty about treats", "Focus on overall patterns", "Track your balance"],
+                difficulty: 2,
+                action: "Find Balance"
+            },
+            {
+                number: 10,
+                title: "Time Warrior",
+                category: "nutrition",
+                challenge: "Try intermittent fasting - eat only within an 8-hour window for 1 week",
+                tips: ["Start with 12-hour window", "Stay hydrated while fasting", "Choose nutrient-dense meals", "Listen to your body"],
+                difficulty: 3,
+                action: "Time Eating"
+            },
+            {
+                number: 11,
+                title: "Whole Food Explorer",
+                category: "nutrition",
+                challenge: "Eat only whole, unprocessed foods for 5 days",
+                tips: ["Shop the perimeter of stores", "Read ingredient lists", "Choose foods with one ingredient", "Cook from scratch"],
+                difficulty: 3,
+                action: "Go Whole"
+            },
+            {
+                number: 12,
+                title: "Cardio Crusader",
+                category: "activity",
+                challenge: "Complete 30 minutes of cardio 5 days this week",
+                tips: ["Start with 15 minutes if needed", "Try different activities daily", "Include warm-up and cool-down", "Track your progress"],
+                difficulty: 2,
+                action: "Get Moving"
+            },
+            {
+                number: 13,
+                title: "Strength Builder",
+                category: "activity",
+                challenge: "Do bodyweight exercises 3 times this week",
+                tips: ["Start with basic movements", "Focus on proper form", "Rest between workout days", "Progress gradually"],
+                difficulty: 2,
+                action: "Build Strength"
+            },
+            {
+                number: 14,
+                title: "HIIT Hurricane",
+                category: "activity",
+                challenge: "Complete 3 HIIT workouts this week (20 minutes each)",
+                tips: ["Work hard, rest smart", "Use a timer app", "Start with 30 sec work/30 sec rest", "Cool down properly"],
+                difficulty: 3,
+                action: "HIIT It"
+            },
+            {
+                number: 15,
+                title: "Step Counter",
+                category: "activity",
+                challenge: "Walk 10,000 steps every day for 1 week",
+                tips: ["Use a step tracking app", "Take stairs when possible", "Park farther away", "Walk during phone calls"],
+                difficulty: 2,
+                action: "Step It Up"
+            },
+            {
+                number: 16,
+                title: "Movement Breaker",
+                category: "activity",
+                challenge: "Take a 2-minute movement break every hour for 8 hours",
+                tips: ["Set hourly alarms", "Do desk stretches", "Walk around the office", "Try bodyweight exercises"],
+                difficulty: 1,
+                action: "Break It Up"
+            },
+            {
+                number: 17,
+                title: "Fun Finder",
+                category: "activity",
+                challenge: "Try 3 new physical activities this week",
+                tips: ["Join a class", "Try dancing at home", "Go hiking", "Play a sport with friends"],
+                difficulty: 2,
+                action: "Have Fun"
+            },
+            {
+                number: 18,
+                title: "Morning Mover",
+                category: "activity",
+                challenge: "Exercise for 20 minutes every morning for 1 week",
+                tips: ["Lay out workout clothes", "Start with gentle stretching", "Do it before checking phone", "Keep it simple"],
+                difficulty: 2,
+                action: "Rise & Move"
+            },
+            {
+                number: 19,
+                title: "Goal Setter",
+                category: "behavior",
+                challenge: "Write 3 SMART weight loss goals and review them daily",
+                tips: ["Make goals specific and measurable", "Set realistic timelines", "Write them down visibly", "Celebrate small wins"],
+                difficulty: 1,
+                action: "Set Goals"
+            },
+            {
+                number: 20,
+                title: "Progress Tracker",
+                category: "behavior",
+                challenge: "Log your food, exercise, and mood for 10 days",
+                tips: ["Use one tracking method", "Be honest and complete", "Look for patterns", "Don't judge yourself"],
+                difficulty: 2,
+                action: "Track Progress"
+            },
+            {
+                number: 21,
+                title: "Sleep Warrior",
+                category: "behavior",
+                challenge: "Get 7-8 hours of quality sleep every night for 1 week",
+                tips: ["Set a bedtime routine", "Avoid screens 1 hour before bed", "Keep bedroom cool and dark", "No caffeine after 2 PM"],
+                difficulty: 2,
+                action: "Sleep Better"
+            },
+            {
+                number: 22,
+                title: "Stress Buster",
+                category: "behavior",
+                challenge: "Practice 10 minutes of stress reduction daily for 2 weeks",
+                tips: ["Try meditation apps", "Practice deep breathing", "Take nature walks", "Journal your thoughts"],
+                difficulty: 2,
+                action: "Bust Stress"
+            },
+            {
+                number: 23,
+                title: "Support Seeker",
+                category: "behavior",
+                challenge: "Connect with 3 people who support your health goals",
+                tips: ["Share your goals with friends", "Join online communities", "Find a workout buddy", "Ask family for support"],
+                difficulty: 1,
+                action: "Build Support"
+            },
+            {
+                number: 24,
+                title: "Trigger Hunter",
+                category: "behavior",
+                challenge: "Identify your top 3 eating triggers and create alternative responses",
+                tips: ["Notice emotional patterns", "Identify trigger situations", "Plan healthy alternatives", "Practice new responses"],
+                difficulty: 3,
+                action: "Hunt Triggers"
+            },
+            {
+                number: 25,
+                title: "Self-Love Champion",
+                category: "behavior",
+                challenge: "Practice positive self-talk and forgive yourself for setbacks daily",
+                tips: ["Replace negative thoughts", "Speak to yourself like a friend", "Focus on progress, not perfection", "Celebrate small victories"],
+                difficulty: 2,
+                action: "Love Yourself"
+            },
+            {
+                number: 26,
+                title: "Environment Designer",
+                category: "behavior",
+                challenge: "Remove 5 unhealthy foods from your home and add 5 healthy options",
+                tips: ["Clean out pantry and fridge", "Put healthy foods at eye level", "Pre-cut vegetables", "Keep fruits visible"],
+                difficulty: 2,
+                action: "Design Space"
+            },
+            {
+                number: 27,
+                title: "Carb Cyclist",
+                category: "advanced",
+                challenge: "Alternate high-carb and low-carb days for 1 week",
+                tips: ["Plan meals in advance", "Time high-carb days with workouts", "Focus on complex carbs", "Stay hydrated"],
+                difficulty: 3,
+                action: "Cycle Carbs"
+            },
+            {
+                number: 28,
+                title: "Volume Master",
+                category: "advanced",
+                challenge: "Eat high-volume, low-calorie foods for every meal for 5 days",
+                tips: ["Fill up on vegetables", "Choose water-rich foods", "Add air-popped popcorn", "Include soup or salad first"],
+                difficulty: 2,
+                action: "Master Volume"
+            },
+            {
+                number: 29,
+                title: "Glycemic Guide",
+                category: "advanced",
+                challenge: "Choose only low-glycemic foods for 1 week",
+                tips: ["Focus on whole grains", "Pair carbs with protein", "Choose berries over tropical fruits", "Avoid processed foods"],
+                difficulty: 3,
+                action: "Go Low-GI"
+            },
+            {
+                number: 30,
+                title: "Food Combiner",
+                category: "advanced",
+                challenge: "Combine protein with fiber at every meal for 1 week",
+                tips: ["Add beans to salads", "Pair chicken with vegetables", "Choose Greek yogurt with berries", "Snack on nuts with apple"],
+                difficulty: 2,
+                action: "Combine Smart"
+            },
+            {
+                number: 31,
+                title: "Meal Frequency Experimenter",
+                category: "advanced",
+                challenge: "Try eating 6 small meals per day for 1 week, then 3 large meals the next week",
+                tips: ["Keep portions appropriate", "Plan meals in advance", "Listen to hunger cues", "Note energy levels"],
+                difficulty: 3,
+                action: "Experiment"
+            },
+            {
+                number: 32,
+                title: "Macro Tracker",
+                category: "advanced",
+                challenge: "Track and hit specific macronutrient targets for 1 week",
+                tips: ["Calculate your needs", "Use a macro tracking app", "Plan meals around targets", "Adjust as needed"],
+                difficulty: 3,
+                action: "Track Macros"
+            },
+            {
+                number: 33,
+                title: "Green Tea Sipper",
+                category: "metabolic",
+                challenge: "Drink 3 cups of green tea daily for 2 weeks",
+                tips: ["Drink between meals", "Don't add sugar", "Try different varieties", "Time around workouts"],
+                difficulty: 1,
+                action: "Sip Green"
+            },
+            {
+                number: 34,
+                title: "Spice Master",
+                category: "metabolic",
+                challenge: "Add metabolism-boosting spices to every meal for 1 week",
+                tips: ["Use cayenne, cinnamon, ginger", "Add to both sweet and savory", "Start with small amounts", "Experiment with combinations"],
+                difficulty: 1,
+                action: "Spice It Up"
+            },
+            {
+                number: 35,
+                title: "Breakfast Champion",
+                category: "metabolic",
+                challenge: "Eat a protein-rich breakfast within 1 hour of waking for 2 weeks",
+                tips: ["Prepare night before", "Include 20-30g protein", "Add healthy fats", "Avoid sugary options"],
+                difficulty: 2,
+                action: "Champion Breakfast"
+            },
+            {
+                number: 36,
+                title: "Cold Challenger",
+                category: "metabolic",
+                challenge: "Take cold showers for 30 seconds daily for 1 week",
+                tips: ["Start with cool water", "End hot showers with cold", "Breathe deeply", "Gradually increase duration"],
+                difficulty: 2,
+                action: "Get Cold"
+            },
+            {
+                number: 37,
+                title: "Standing Warrior",
+                category: "metabolic",
+                challenge: "Stand for 2 hours more than usual every day for 1 week",
+                tips: ["Use a standing desk", "Stand during TV time", "Take standing breaks", "Do calf raises while standing"],
+                difficulty: 1,
+                action: "Stand Up"
+            },
+            {
+                number: 38,
+                title: "Temperature Controller",
+                category: "metabolic",
+                challenge: "Keep your environment 2-3 degrees cooler for 1 week",
+                tips: ["Adjust thermostat gradually", "Layer clothing appropriately", "Notice energy changes", "Stay comfortable"],
+                difficulty: 1,
+                action: "Cool Down"
+            },
+            {
+                number: 39,
+                title: "Success Visualizer",
+                category: "psychological",
+                challenge: "Spend 10 minutes daily visualizing your success for 2 weeks",
+                tips: ["Create detailed mental images", "Include all senses", "Feel the emotions", "Practice regularly"],
+                difficulty: 2,
+                action: "Visualize"
+            },
+            {
+                number: 40,
+                title: "Affirmation Master",
+                category: "psychological",
+                challenge: "Say 5 positive affirmations about your health journey daily",
+                tips: ["Make them personal", "Say them with conviction", "Write them down", "Believe in them"],
+                difficulty: 1,
+                action: "Affirm Success"
+            },
+            {
+                number: 41,
+                title: "Delay Master",
+                category: "psychological",
+                challenge: "Wait 15 minutes before eating any craved unhealthy food for 1 week",
+                tips: ["Set a timer", "Do another activity", "Drink water first", "Often cravings pass"],
+                difficulty: 2,
+                action: "Delay & Decide"
+            },
+            {
+                number: 42,
+                title: "Victory Celebrator",
+                category: "psychological",
+                challenge: "Celebrate 3 non-scale victories each week for 1 month",
+                tips: ["Notice increased energy", "Celebrate better sleep", "Acknowledge mood improvements", "Share with others"],
+                difficulty: 1,
+                action: "Celebrate Wins"
+            },
+            {
+                number: 43,
+                title: "Scale Master",
+                category: "monitoring",
+                challenge: "Weigh yourself same time, same conditions twice weekly for 1 month",
+                tips: ["Use same scale", "Weigh in morning", "Wear similar clothing", "Track trends, not daily changes"],
+                difficulty: 1,
+                action: "Master Scale"
+            },
+            {
+                number: 44,
+                title: "Adjustment Ace",
+                category: "monitoring",
+                challenge: "Review and adjust your approach every 2 weeks based on results",
+                tips: ["Look at all data", "Be honest about what's working", "Make small changes", "Stay flexible"],
+                difficulty: 2,
+                action: "Adjust & Ace"
+            }
+        ];
+
+        let currentCards = [...cards];
+        let filteredCards = [...cards];
+
+        function renderCards(cardsToRender = currentCards) {
+            const grid = document.getElementById('cardsGrid');
+            grid.innerHTML = '';
+
+            cardsToRender.forEach(card => {
+                const cardElement = createCardElement(card);
+                grid.appendChild(cardElement);
+            });
+        }
+
+        function createCardElement(card) {
+            const div = document.createElement('div');
+            div.className = `card ${card.category}`;
+            div.onclick = () => showCardDetails(card);
+
+            const difficultyDots = Array.from({length: 3}, (_, i) => 
+                `<div class="difficulty-dot ${i < card.difficulty ? 'filled' : ''}"></div>`
+            ).join('');
+
+            div.innerHTML = `
+                <div class="card-header">
+                    <div class="card-number">Card ${card.number}</div>
+                    <div class="card-title">${card.title}</div>
+                    <div class="card-category">${card.category.charAt(0).toUpperCase() + card.category.slice(1)}</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-challenge">
+                        <div class="challenge-title">🎯 Challenge:</div>
+                        <div>${card.challenge}</div>
+                    </div>
+                    <ul class="card-tips">
+                        ${card.tips.slice(0, 2).map(tip => `<li>${tip}</li>`).join('')}
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <div class="difficulty">
+                        ${difficultyDots}
+                    </div>
+                    <button class="card-action">${card.action}</button>
+                </div>
+            `;
+
+            return div;
+        }
+
+        function showCardDetails(card) {
+            const modal = document.getElementById('cardModal');
+            const modalContent = document.getElementById('modalContent');
+
+            const difficultyText = ['Easy', 'Medium', 'Hard'][card.difficulty - 1];
+            const difficultyDots = Array.from({length: 3}, (_, i) => 
+                `<div class="difficulty-dot ${i < card.difficulty ? 'filled' : ''}"></div>`
+            ).join('');
+
+            modalContent.innerHTML = `
+                <div class="modal-header">
+                    <h2 class="modal-title">${card.title}</h2>
+                    <p style="color: #666; margin-bottom: 10px;">Card ${card.number} • ${card.category.charAt(0).toUpperCase() + card.category.slice(1)}</p>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span>Difficulty: ${difficultyText}</span>
+                        <div class="difficulty">${difficultyDots}</div>
+                    </div>
+                </div>
+                <div class="card-challenge" style="--card-color: var(--${card.category}-color);">
+                    <div class="challenge-title">🎯 Your Challenge:</div>
+                    <div style="font-size: 1.1rem;">${card.challenge}</div>
+                </div>
+                <div style="margin: 20px 0;">
+                    <h4>💡 Success Tips:</h4>
+                    <ul class="card-tips">
+                        ${card.tips.map(tip => `<li>${tip}</li>`).join('')}
+                    </ul>
+                </div>
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn btn-primary" onclick="acceptChallenge(${card.number})" style="padding: 12px 30px; font-size: 1.1rem; margin-right: 10px;">Accept Challenge</button>
+                    <button class="btn btn-secondary" onclick="closeModal()" style="padding: 12px 30px; font-size: 1.1rem;">Close</button>
+                </div>
+            `;
+
+            modal.style.display = 'flex';
+        }
+
+        function acceptChallenge(cardNumber) {
+            alert(`🎉 Challenge Accepted! You've committed to Card ${cardNumber}. Good luck on your journey!`);
+            closeModal();
+        }
+
+        function closeModal() {
+            document.getElementById('cardModal').style.display = 'none';
+        }
+
+        function shuffleCards() {
+            currentCards = [...cards].sort(() => Math.random() - 0.5);
+            renderCards(currentCards);
+        }
+
+        function drawRandomCard() {
+            const randomCard = filteredCards[Math.floor(Math.random() * filteredCards.length)];
+            showCardDetails(randomCard);
+        }
+
+        function showAll() {
+            currentCards = [...cards];
+            filteredCards = [...cards];
+            renderCards(currentCards);
+            // Reset filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('.filter-btn[data-category="all"]').classList.add('active');
+        }
+
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const category = this.dataset.category;
+                
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                if (category === 'all') {
+                    filteredCards = [...cards];
+                    currentCards = [...cards];
+                } else {
+                    filteredCards = cards.filter(card => card.category === category);
+                    currentCards = [...filteredCards];
+                }
+                
+                renderCards(currentCards);
+            });
+        });
+
+        // Modal close functionality
+        document.querySelector('.close').onclick = closeModal;
+        window.onclick = function(event) {
+            const modal = document.getElementById('cardModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Initialize the app
+        renderCards();
+    </script>
+</body>
+</html>
